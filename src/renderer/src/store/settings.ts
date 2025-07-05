@@ -188,6 +188,9 @@ export interface SettingsState {
     backup: boolean
     knowledge: boolean
   }
+  // HTTP API Server
+  httpApiServerEnabled: boolean
+  httpApiServerPort: number
   defaultPaintingProvider: PaintingProvider
 }
 
@@ -336,6 +339,8 @@ export const initialState: SettingsState = {
     backup: false,
     knowledge: false
   },
+  httpApiServerEnabled: true,
+  httpApiServerPort: 15000,
   defaultPaintingProvider: 'aihubmix'
 }
 
@@ -703,6 +708,12 @@ const settingsSlice = createSlice({
     },
     setDefaultPaintingProvider: (state, action: PayloadAction<PaintingProvider>) => {
       state.defaultPaintingProvider = action.payload
+    },
+    setHttpApiServerEnabled: (state, action: PayloadAction<boolean>) => {
+      state.httpApiServerEnabled = action.payload
+    },
+    setHttpApiServerPort: (state, action: PayloadAction<number>) => {
+      state.httpApiServerPort = action.payload
     }
   }
 })
@@ -812,7 +823,9 @@ export const {
   setOpenAISummaryText,
   setOpenAIServiceTier,
   setNotificationSettings,
-  setDefaultPaintingProvider
+  setDefaultPaintingProvider,
+  setHttpApiServerEnabled,
+  setHttpApiServerPort
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

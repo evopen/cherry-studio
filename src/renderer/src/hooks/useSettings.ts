@@ -5,6 +5,8 @@ import {
   setAssistantIconType,
   setAutoCheckUpdate as _setAutoCheckUpdate,
   setDisableHardwareAcceleration,
+  setHttpApiServerEnabled,
+  setHttpApiServerPort,
   setLaunchOnBoot,
   setLaunchToTray,
   setPinTopicsToTop,
@@ -105,6 +107,14 @@ export function useSettings() {
     setDisableHardwareAcceleration(disableHardwareAcceleration: boolean) {
       dispatch(setDisableHardwareAcceleration(disableHardwareAcceleration))
       window.api.setDisableHardwareAcceleration(disableHardwareAcceleration)
+    },
+    setHttpApiServerEnabled(enabled: boolean) {
+      dispatch(setHttpApiServerEnabled(enabled))
+      window.api.setHttpApiServerEnabled(enabled)
+    },
+    setHttpApiServerPort(port: number) {
+      dispatch(setHttpApiServerPort(port))
+      window.api.setHttpApiServerPort(port)
     }
   }
 }

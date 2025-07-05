@@ -37,7 +37,11 @@ const GeneralSettings: FC = () => {
     enableDataCollection,
     enableSpellCheck,
     disableHardwareAcceleration,
-    setDisableHardwareAcceleration
+    setDisableHardwareAcceleration,
+    httpApiServerEnabled,
+    httpApiServerPort,
+    setHttpApiServerEnabled,
+    setHttpApiServerPort
   } = useSettings()
   const [proxyUrl, setProxyUrl] = useState<string | undefined>(storeProxyUrl)
   const { theme } = useTheme()
@@ -312,6 +316,24 @@ const GeneralSettings: FC = () => {
               dispatch(setEnableDataCollection(v))
               window.api.config.set('enableDataCollection', v)
             }}
+          />
+        </SettingRow>
+      </SettingGroup>
+      <SettingGroup theme={theme}>
+        <SettingTitle>{t('settings.http_api_server.title')}</SettingTitle>
+        <SettingDivider />
+        <SettingRow>
+          <SettingRowTitle>{t('settings.http_api_server.enable')}</SettingRowTitle>
+          <Switch checked={httpApiServerEnabled} onChange={(checked) => setHttpApiServerEnabled(checked)} />
+        </SettingRow>
+        <SettingDivider />
+        <SettingRow>
+          <SettingRowTitle>{t('settings.http_api_server.port')}</SettingRowTitle>
+          <Input
+            value={httpApiServerPort}
+            onChange={(e) => setHttpApiServerPort(Number(e.target.value))}
+            style={{ width: 180 }}
+            type="number"
           />
         </SettingRow>
       </SettingGroup>

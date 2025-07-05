@@ -22,6 +22,10 @@ import type { ActionItem } from '../renderer/src/types/selectionTypes'
 
 // Custom APIs for renderer
 const api = {
+  setHttpApiServerEnabled: (enabled) => ipcRenderer.invoke(IpcChannel.App_SetHttpApiServerEnabled, enabled),
+  setHttpApiServerPort: (port: number) => {
+    ipcRenderer.invoke(IpcChannel.App_SetHttpApiServerPort, port)
+  },
   getAppInfo: () => ipcRenderer.invoke(IpcChannel.App_Info),
   reload: () => ipcRenderer.invoke(IpcChannel.App_Reload),
   setProxy: (proxy: string | undefined) => ipcRenderer.invoke(IpcChannel.App_Proxy, proxy),

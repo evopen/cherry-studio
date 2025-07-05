@@ -565,4 +565,12 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
   ipcMain.handle(IpcChannel.App_SetDisableHardwareAcceleration, (_, isDisable: boolean) => {
     configManager.setDisableHardwareAcceleration(isDisable)
   })
+
+  ipcMain.handle(IpcChannel.App_SetHttpApiServerEnabled, (_, enabled: boolean) => {
+    configManager.setHttpApiServerEnabled(enabled)
+  })
+
+  ipcMain.handle(IpcChannel.App_SetHttpApiServerPort, (_, port: number) => {
+    configManager.setHttpApiServerPort(port)
+  })
 }

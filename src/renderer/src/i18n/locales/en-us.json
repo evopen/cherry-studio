@@ -1812,6 +1812,11 @@
           "content": "Disabling hardware acceleration requires restarting the app to take effect. Do you want to restart now?"
         }
       },
+      "http_api_server": {
+        "title": "HTTP API Server",
+        "enable": "Enable HTTP API Server",
+        "port": "Port"
+      },
       "quickAssistant": {
         "click_tray_to_show": "Click the tray icon to start",
         "enable_quick_assistant": "Enable Quick Assistant",

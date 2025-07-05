@@ -25,6 +25,8 @@ export enum ConfigKeys {
   SelectionAssistantRemeberWinSize = 'selectionAssistantRemeberWinSize',
   SelectionAssistantFilterMode = 'selectionAssistantFilterMode',
   SelectionAssistantFilterList = 'selectionAssistantFilterList',
+  HttpApiServerEnabled = 'httpApiServer.enabled',
+  HttpApiServerPort = 'httpApiServer.port',
   DisableHardwareAcceleration = 'disableHardwareAcceleration'
 }
 
@@ -225,6 +227,22 @@ export class ConfigManager {
 
   setDisableHardwareAcceleration(value: boolean) {
     this.set(ConfigKeys.DisableHardwareAcceleration, value)
+  }
+
+  getHttpApiServerEnabled(): boolean {
+    return this.get<boolean>(ConfigKeys.HttpApiServerEnabled, true)
+  }
+
+  setHttpApiServerEnabled(value: boolean) {
+    this.setAndNotify(ConfigKeys.HttpApiServerEnabled, value)
+  }
+
+  getHttpApiServerPort(): number {
+    return this.get<number>(ConfigKeys.HttpApiServerPort, 15000)
+  }
+
+  setHttpApiServerPort(value: number) {
+    this.setAndNotify(ConfigKeys.HttpApiServerPort, value)
   }
 
   setAndNotify(key: string, value: unknown) {

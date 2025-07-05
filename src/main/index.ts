@@ -13,7 +13,8 @@ import Logger from 'electron-log'
 
 import { isDev, isWin } from './constant'
 import { registerIpc } from './ipc'
-import { configManager } from './services/ConfigManager'
+import { configManager, ConfigKeys } from './services/ConfigManager'
+import { httpApiServer } from './services/HttpApiServer'
 import mcpService from './services/MCPService'
 import {
   CHERRY_STUDIO_PROTOCOL,
@@ -127,6 +128,31 @@ if (!app.requestSingleInstanceLock()) {
 
     //start selection assistant service
     initSelectionService()
+
+    // Start HTTP API server if enabled
+    const isHttpApiServerEnabled = configManager.getHttpApiServerEnabled()
+    if (isHttpApiServerEnabled) {
+      httpApiServer.start()
+    } else {
+      httpApiServer.stop()
+    }
+
+    // Listen for changes to httpApiServer.enabled setting
+    configManager.subscribe(ConfigKeys.HttpApiServerEnabled, (enabled: boolean) => {
+      if (enabled) {
+        httpApiServer.start()
+      } else {
+        httpApiServer.stop()
+      }
+    })
+
+    // Listen for changes to httpApiServer.port setting
+    configManager.subscribe(ConfigKeys.HttpApiServerPort, () => {
+      if (httpApiServer.isRunning()) {
+        httpApiServer.stop()
+        httpApiServer.start()
+      }
+    })
   })
 
   registerProtocolClient(app)
@@ -172,6 +198,7 @@ if (!app.requestSingleInstanceLock()) {
     // event.preventDefault()
     try {
       await mcpService.cleanup()
+      httpApiServer.stop()
     } catch (error) {
       Logger.error('Error cleaning up MCP service:', error)
     }
