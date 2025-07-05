@@ -1,8 +1,10 @@
-import { app } from 'electron'
+import { app, ipcMain } from 'electron'
 import express from 'express'
 import { Server } from 'http'
 
+import { IpcChannel } from '../../../packages/shared/IpcChannel'
 import { configManager } from './ConfigManager'
+import { windowService } from './WindowService'
 
 export class HttpApiServer {
   private app: express.Application
@@ -16,6 +18,32 @@ export class HttpApiServer {
   private setupRoutes() {
     this.app.get('/version', (_, res) => {
       res.json({ version: app.getVersion() })
+    })
+
+    this.app.get('/topics', async (_, res) => {
+      const mainWindow = windowService.getMainWindow()
+      if (!mainWindow) {
+        return res.status(503).json({ error: 'Service unavailable' })
+      }
+
+      ipcMain.once(IpcChannel.Api_Response, (event, data) => {
+        res.json(data)
+      })
+      mainWindow.webContents.send(IpcChannel.Api_GetAllTopics)
+    })
+
+    this.app.get('/topic/:id', async (req, res) => {
+      const mainWindow = windowService.getMainWindow()
+      if (!mainWindow) {
+        return res.status(503).json({ error: 'Service unavailable' })
+      }
+
+      const { id } = req.params
+
+      ipcMain.once(IpcChannel.Api_Response, (event, data) => {
+        res.json(data)
+      })
+      mainWindow.webContents.send(IpcChannel.Api_GetTopicByID, id)
     })
   }
 

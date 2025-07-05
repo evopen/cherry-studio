@@ -233,5 +233,10 @@ export enum IpcChannel {
   Selection_ActionWindowMinimize = 'selection:action-window-minimize',
   Selection_ActionWindowPin = 'selection:action-window-pin',
   Selection_ProcessAction = 'selection:process-action',
-  Selection_UpdateActionData = 'selection:update-action-data'
+  Selection_UpdateActionData = 'selection:update-action-data',
+
+  // Http API Server
+  Api_GetAllTopics = 'api:get-all-topics',
+  Api_GetTopicByID = 'api:get-topic-by-id',
+  Api_Response = 'api:response'
 }
