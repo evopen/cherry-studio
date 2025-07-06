@@ -26,6 +26,8 @@ const api = {
   setHttpApiServerPort: (port: number) => {
     ipcRenderer.invoke(IpcChannel.App_SetHttpApiServerPort, port)
   },
+  setPostgresUrl: (url: string) => ipcRenderer.invoke(IpcChannel.App_SetPostgresUrl, url),
+  checkPostgresConnection: (url: string) => ipcRenderer.invoke(IpcChannel.App_CheckPostgresConnection, url),
   getAppInfo: () => ipcRenderer.invoke(IpcChannel.App_Info),
   reload: () => ipcRenderer.invoke(IpcChannel.App_Reload),
   setProxy: (proxy: string | undefined) => ipcRenderer.invoke(IpcChannel.App_Proxy, proxy),

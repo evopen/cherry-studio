@@ -1817,6 +1817,14 @@
         "enable": "Enable HTTP API Server",
         "port": "Port"
       },
+      "postgres": {
+        "title": "PostgreSQL Settings",
+        "url": "PostgreSQL URL",
+        "url_placeholder": "e.g., postgresql://user:password@host:port/database"
+      },
+      "check_connection": {
+        "title": "PostgreSQL Connection Check"
+      },
       "quickAssistant": {
         "click_tray_to_show": "Click the tray icon to start",
         "enable_quick_assistant": "Enable Quick Assistant",

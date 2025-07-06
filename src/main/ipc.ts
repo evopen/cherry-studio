@@ -1,3 +1,4 @@
+import { Client } from 'pg'
 import fs from 'node:fs'
 import { arch } from 'node:os'
 import path from 'node:path'
@@ -572,5 +573,26 @@ export function registerIpc(mainWindow: BrowserWindow, app: Electron.App) {
 
   ipcMain.handle(IpcChannel.App_SetHttpApiServerPort, (_, port: number) => {
     configManager.setHttpApiServerPort(port)
+  })
+
+  ipcMain.handle(IpcChannel.App_SetPostgresUrl, (_, url: string) => {
+    configManager.set('postgresUrl', url)
+  })
+
+  ipcMain.handle(IpcChannel.App_CheckPostgresConnection, async (_, url: string) => {
+    const client = new Client({
+      connectionString: url,
+      statement_timeout: 5000, // 5 seconds
+      query_timeout: 5000, // 5 seconds
+      connectionTimeoutMillis: 5000 // 5 seconds
+    })
+    try {
+      await client.connect()
+      await client.end()
+      return { success: true }
+    } catch (error: any) {
+      log.error('PostgreSQL connection test failed:', error)
+      return { success: false, error: error.message }
+    }
   })
 }

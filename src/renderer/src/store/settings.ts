@@ -191,6 +191,7 @@ export interface SettingsState {
   // HTTP API Server
   httpApiServerEnabled: boolean
   httpApiServerPort: number
+  postgresUrl: string | null
   defaultPaintingProvider: PaintingProvider
 }
 
@@ -341,6 +342,7 @@ export const initialState: SettingsState = {
   },
   httpApiServerEnabled: true,
   httpApiServerPort: 15000,
+  postgresUrl: null,
   defaultPaintingProvider: 'aihubmix'
 }
 
@@ -714,6 +716,9 @@ const settingsSlice = createSlice({
     },
     setHttpApiServerPort: (state, action: PayloadAction<number>) => {
       state.httpApiServerPort = action.payload
+    },
+    setPostgresUrl: (state, action: PayloadAction<string | null>) => {
+      state.postgresUrl = action.payload
     }
   }
 })
@@ -825,7 +830,8 @@ export const {
   setNotificationSettings,
   setDefaultPaintingProvider,
   setHttpApiServerEnabled,
-  setHttpApiServerPort
+  setHttpApiServerPort,
+  setPostgresUrl
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

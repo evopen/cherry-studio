@@ -20,5 +20,6 @@ declare global {
     config: any
     setHttpApiServerEnabled: (enabled: boolean) => void
     setHttpApiServerPort: (port: number) => void
+    setPostgresUrl: (url: string) => void
   }
 }

@@ -1817,6 +1817,14 @@
         "enable": "启用 HTTP API 服务器",
         "port": "端口"
       },
+      "postgres": {
+        "title": "PostgreSQL 设置",
+        "url": "PostgreSQL URL",
+        "url_placeholder": "例如：postgresql://user:password@host:port/database"
+      },
+      "check_connection": {
+        "title": "PostgreSQL 连接检测"
+      },
       "quickAssistant": {
         "click_tray_to_show": "点击托盘图标启动",
         "enable_quick_assistant": "启用快捷助手",

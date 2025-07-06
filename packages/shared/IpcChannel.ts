@@ -2,6 +2,8 @@ export enum IpcChannel {
   // API server
   App_SetHttpApiServerEnabled = 'app:set-http-api-server-enabled',
   App_SetHttpApiServerPort = 'app:set-http-api-server-port',
+  App_SetPostgresUrl = 'app:set-postgres-url',
+  App_CheckPostgresConnection = 'app:check-postgres-connection',
 
   App_GetCacheSize = 'app:get-cache-size',
   App_ClearCache = 'app:clear-cache',

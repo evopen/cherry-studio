@@ -69,6 +69,7 @@
     "notion-helper": "^1.3.22",
     "os-proxy-config": "^1.1.2",
     "pdfjs-dist": "4.10.38",
+    "pg": "^8.16.3",
     "selection-hook": "^1.0.4",
     "turndown": "7.2.0"
   },
@@ -126,6 +127,7 @@
     "@types/md5": "^2.3.5",
     "@types/node": "^18.19.9",
     "@types/pako": "^1.0.2",
+    "@types/pg": "^8",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
     "@types/react-infinite-scroll-component": "^5.0.0",

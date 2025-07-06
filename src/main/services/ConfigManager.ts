@@ -27,6 +27,7 @@ export enum ConfigKeys {
   SelectionAssistantFilterList = 'selectionAssistantFilterList',
   HttpApiServerEnabled = 'httpApiServer.enabled',
   HttpApiServerPort = 'httpApiServer.port',
+  PostgresUrl = 'postgresUrl',
   DisableHardwareAcceleration = 'disableHardwareAcceleration'
 }
 
@@ -243,6 +244,14 @@ export class ConfigManager {
 
   setHttpApiServerPort(value: number) {
     this.setAndNotify(ConfigKeys.HttpApiServerPort, value)
+  }
+
+  getPostgresUrl(): string | null {
+    return this.get<string | null>(ConfigKeys.PostgresUrl, null)
+  }
+
+  setPostgresUrl(value: string | null) {
+    this.setAndNotify(ConfigKeys.PostgresUrl, value)
   }
 
   setAndNotify(key: string, value: unknown) {

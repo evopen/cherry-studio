@@ -7,6 +7,7 @@ import {
   setDisableHardwareAcceleration,
   setHttpApiServerEnabled,
   setHttpApiServerPort,
+  setPostgresUrl,
   setLaunchOnBoot,
   setLaunchToTray,
   setPinTopicsToTop,
@@ -115,6 +116,10 @@ export function useSettings() {
     setHttpApiServerPort(port: number) {
       dispatch(setHttpApiServerPort(port))
       window.api.setHttpApiServerPort(port)
+    },
+    setPostgresUrl(url: string) {
+      dispatch(setPostgresUrl(url))
+      window.api.setPostgresUrl(url)
     }
   }
 }

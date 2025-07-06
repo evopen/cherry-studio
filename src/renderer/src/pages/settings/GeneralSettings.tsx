@@ -1,4 +1,6 @@
+import { CheckOutlined, LoadingOutlined } from '@ant-design/icons'
 import Selector from '@renderer/components/Selector'
+import PostgresCheckPopup from './PostgresCheckPopup'
 import { useTheme } from '@renderer/context/ThemeProvider'
 import { useSettings } from '@renderer/hooks/useSettings'
 import i18n from '@renderer/i18n'
@@ -16,12 +18,13 @@ import { LanguageVarious } from '@renderer/types'
 import { NotificationSource } from '@renderer/types/notification'
 import { isValidProxyUrl } from '@renderer/utils'
 import { defaultLanguage } from '@shared/config/constant'
-import { Flex, Input, Switch } from 'antd'
+import { Flex, Input, Space, Switch } from 'antd'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import { SettingContainer, SettingDivider, SettingGroup, SettingRow, SettingRowTitle, SettingTitle } from '.'
+import { Button } from 'antd/lib'
 
 const GeneralSettings: FC = () => {
   const {
@@ -41,10 +44,13 @@ const GeneralSettings: FC = () => {
     httpApiServerEnabled,
     httpApiServerPort,
     setHttpApiServerEnabled,
-    setHttpApiServerPort
+    setHttpApiServerPort,
+    postgresUrl,
+    setPostgresUrl
   } = useSettings()
   const [proxyUrl, setProxyUrl] = useState<string | undefined>(storeProxyUrl)
   const { theme } = useTheme()
+  const [postgresConnectionStatus, setPostgresConnectionStatus] = useState<'idle' | 'checking' | 'success' | 'failed'>('idle')
 
   const updateTray = (isShowTray: boolean) => {
     setTray(isShowTray)
@@ -151,6 +157,24 @@ const GeneralSettings: FC = () => {
   const handleSpellCheckLanguagesChange = (selectedLanguages: string[]) => {
     dispatch(setSpellCheckLanguages(selectedLanguages))
     window.api.setSpellCheckLanguages(selectedLanguages)
+  }
+
+  const handleCheckPostgresConnection = async () => {
+    if (!postgresUrl) return
+
+    setPostgresConnectionStatus('checking')
+    try {
+      const result = await window.api.checkPostgresConnection(postgresUrl)
+      if (result.success) {
+        setPostgresConnectionStatus('success')
+      } else {
+        setPostgresConnectionStatus('failed')
+      }
+      PostgresCheckPopup.show({ url: postgresUrl, success: result.success, error: result.error })
+    } catch (error: any) {
+      setPostgresConnectionStatus('failed')
+      PostgresCheckPopup.show({ url: postgresUrl, success: false, error: error.message })
+    }
   }
 
   const handleHardwareAccelerationChange = (checked: boolean) => {
@@ -335,6 +359,29 @@ const GeneralSettings: FC = () => {
             style={{ width: 180 }}
             type="number"
           />
+        </SettingRow>
+      </SettingGroup>
+      <SettingGroup theme={theme}>
+        <SettingTitle>{t('settings.postgres.title')}</SettingTitle>
+        <SettingDivider />
+        <SettingRow>
+          <SettingRowTitle>{t('settings.postgres.url')}</SettingRowTitle>
+          <Space.Compact style={{ width: '100%' }}>
+            <Input
+              value={postgresUrl || ''}
+              onChange={(e) => setPostgresUrl(e.target.value)}
+              placeholder={t('settings.postgres.url_placeholder')}
+              style={{ width: 300 }}
+            />
+            <Button
+              type={postgresConnectionStatus === 'success' ? 'primary' : 'default'}
+              ghost={postgresConnectionStatus === 'success'}
+              onClick={handleCheckPostgresConnection}
+              disabled={!postgresUrl || postgresConnectionStatus === 'checking'}
+            >
+              {postgresConnectionStatus === 'checking' ? <LoadingOutlined spin /> : postgresConnectionStatus === 'success' ? <CheckOutlined /> : t('common.check')}
+            </Button>
+          </Space.Compact>
         </SettingRow>
       </SettingGroup>
     </SettingContainer>
