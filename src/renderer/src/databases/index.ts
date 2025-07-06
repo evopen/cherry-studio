@@ -77,22 +77,24 @@ db.version(7)
 
 export default db
 
+
+function dumpPersistState() {
+  const persistState = JSON.parse(localStorage.getItem('persist:cherry-studio') || '{}')
+  for (const key in persistState) {
+    persistState[key] = JSON.parse(persistState[key])
+  }
+  return persistState['assistants']
+}
+
 window.electron.ipcRenderer.on(IpcChannel.Api_GetAllTopics, async () => {
   const topics = await db.topics.toArray()
-  const topicsData = JSON.parse(localStorage.getItem('topics') || '[]')
-  const topicsWithMessages = []
-  for (const topic of topics) {
-    const topicData = topicsData.find((t) => t.id === topic.id)
-    const messages = []
-    if (topic.messages) {
-      for (const message of topic.messages) {
-        const blocks = await db.message_blocks.bulkGet(message.blocks || [])
-        messages.push({ ...message, blocks: blocks.filter(Boolean) })
-      }
-    }
-    topicsWithMessages.push({ ...topic, ...topicData, messages })
-  }
-  window.electron.ipcRenderer.send(IpcChannel.Api_Response, topicsWithMessages)
+  const messages = await db.message_blocks.toArray()
+  const persistState = dumpPersistState()
+  window.electron.ipcRenderer.send(IpcChannel.Api_Response, {
+    topics,
+    persistState,
+    messages
+  })
 })
 
 window.electron.ipcRenderer.on(IpcChannel.Api_GetTopicByID, async (event, id) => {
